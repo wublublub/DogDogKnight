@@ -40,7 +40,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
 
     private float speed;//记录当前速度，主要用于区分敌人警戒和追击时的速度差异
 
-    private GameObject attackTarget;
+    protected GameObject attackTarget;
 
     public float lookAtTime;
 
@@ -69,6 +69,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
 
     bool playerDead;
 
+    bool isSkill;
 
     private void Awake()
     {
@@ -249,8 +250,8 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
                 break;
             case EnemyStates.DEAD:
                 coll.enabled = false;
-                agent.enabled = false;//关闭ai
-
+                //agent.enabled = false;
+                agent.radius = 0;//缩小agent的范围
                 Destroy(gameObject, 2f);//死亡两秒后消除该游戏对象
 
                 break;
@@ -262,15 +263,16 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
         //第一步，敌人需要先看向你的攻击目标
         transform.LookAt(attackTarget.transform);//此处应该可以同时使用transform类型的变量和transform.position类型的变量
         //第二步，判断是近身攻击还是技能攻击
-        if(TargetInAttackRange())
+        if (TargetInSkillRange())//优先进行技能攻击判断，由于无技能怪物的技能攻击范围为0，所以此时它们会跳过这个判断
+        {
+            anim.SetTrigger("Skill");//此处不进行暴击判断，之前的update函数中已经在进行判断
+            Debug.Log("技能攻击！");
+        }
+         else if(TargetInAttackRange())
         {
             //播放近身攻击动画
             anim.SetTrigger("Attack");
-
-        }
-         else if (TargetInSkillRange())
-        {
-            anim.SetTrigger("Critical");
+            Debug.Log("普通攻击！");
         }
 
     }
@@ -296,7 +298,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
         if(attackTarget != null)
         {
             //判断是否在攻击范围以内
-            return Vector3.Distance(attackTarget.transform.position,transform.position)<=characterStats.attackData.attackRange;
+            return Vector3.Distance(attackTarget.transform.position, transform.position) <= characterStats.attackData.attackRange;
         }
         else
         {
