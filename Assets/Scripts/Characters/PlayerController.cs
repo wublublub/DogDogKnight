@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isDead;
 
+    public float stopDistance;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
         characterStats = GetComponent<CharacterStats>();
         //每次游戏开始时都将会把角色的当前血量调整为最大血量
         //characterStats.CurrentHealth = characterStats.MaxHealth;
+        stopDistance = agent.stoppingDistance;
 
     }
 
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        agent.stoppingDistance = stopDistance;
         agent.isStopped = false;//此处是为了避免在点击攻击之后人物就没法移动了
         agent.destination = target;
     }
@@ -92,6 +96,9 @@ public class PlayerController : MonoBehaviour
     IEnumerator MoveToAttackTarget()
     {
         agent.isStopped = false;
+
+        agent.stoppingDistance = characterStats.attackData.attackRange;
+
         transform.LookAt(attackTarget.transform);//此处是对应敌人方向进行转向
 
 
@@ -116,9 +123,25 @@ public class PlayerController : MonoBehaviour
     //动画事件
     private void Hit()
     {
-        var targetStats = attackTarget.GetComponent<CharacterStats>();
+        if (attackTarget.CompareTag("Attackable"))
+        {
+            if(attackTarget.GetComponent<Rock>() != null && attackTarget.GetComponent<Rock>().rockStates == Rock.RockStates.HitNothing)
+            {
+                attackTarget.GetComponent<Rock>().rockStates = Rock.RockStates.HitEnemy;
 
-        targetStats.TakeDamage(characterStats, targetStats);
+                attackTarget.GetComponent<Rigidbody>().velocity = Vector3.one;
+
+                attackTarget.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
+            }
+        }
+        else
+        {
+            var targetStats = attackTarget.GetComponent<CharacterStats>();
+            
+            targetStats.TakeDamage(characterStats, targetStats);            
+        }
+
+
 
     }
 

@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
     
     private Animator anim;
 
-    private CharacterStats characterStats;
+    protected CharacterStats characterStats;
 
     private Collider coll;
 
@@ -50,6 +50,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
 
     private Quaternion guardRotation;//记录起始时旋转的角度
 
+
     [Header("Patrol State")]
     public float patrolRange;//巡逻范围
 
@@ -70,6 +71,8 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
     bool playerDead;
 
     bool isSkill;
+
+    bool ifContinue;//是否继续执行动画事件
 
     private void Awake()
     {
@@ -233,7 +236,7 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
                     isFollow = false;
                     agent.isStopped = true;
 
-                    if (lastAttackTime < 0)
+                    if (lastAttackTime < 0 && !characterStats.isBeenHit)//此处为当攻击的CD冷却完成并且角色并未处于受击僵直，眩晕状态
                     {
                         lastAttackTime = characterStats.attackData.coolDown;//此时将下一次的攻击事件重置为攻击的CD时间
 
@@ -242,7 +245,6 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
                         //执行攻击
                         Attack();
                     }
-
                 }
 
 
@@ -263,17 +265,34 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
         //第一步，敌人需要先看向你的攻击目标
         transform.LookAt(attackTarget.transform);//此处应该可以同时使用transform类型的变量和transform.position类型的变量
         //第二步，判断是近身攻击还是技能攻击
-        if (TargetInSkillRange())//优先进行技能攻击判断，由于无技能怪物的技能攻击范围为0，所以此时它们会跳过这个判断
+        bool inAttackRange = TargetInAttackRange();
+        bool inSkillRange = TargetInSkillRange();
+
+        if (inAttackRange && inSkillRange) // 当目标同时在技能范围内和攻击范围内
         {
-            anim.SetTrigger("Skill");//此处不进行暴击判断，之前的update函数中已经在进行判断
+            // 随机选择技能或攻击
+            if (Random.value < 0.5f) // 50% 的机会进行攻击，50% 的机会进行技能
+            {
+                anim.SetTrigger("Attack");
+                Debug.Log("普通攻击！");
+            }
+            else
+            {
+                anim.SetTrigger("Skill");
+                Debug.Log("技能攻击！");
+            }
+        }
+        else if (inSkillRange && !inAttackRange) // 只在技能范围内
+        {
+            anim.SetTrigger("Skill");
             Debug.Log("技能攻击！");
         }
-         else if(TargetInAttackRange())
+        else if (inAttackRange && !inSkillRange) // 只在攻击范围内
         {
-            //播放近身攻击动画
             anim.SetTrigger("Attack");
             Debug.Log("普通攻击！");
         }
+
 
     }
     public bool FoundPlayer()
@@ -345,13 +364,30 @@ public class EnemyController : MonoBehaviour,IEndGameObserver
     //动画事件
     private void Hit()
     {
-        if(attackTarget != null)//先判断攻击目标不为空，避免unity报错
+        if(attackTarget != null && transform.IsFacingTarget(attackTarget.transform))//判断攻击目标不为空且处在攻击角度内,同时还需要满足此时动画并未被打断
         {
             var targetStats = attackTarget.GetComponent<CharacterStats>();
             targetStats.TakeDamage(characterStats, targetStats);
 
         }
     }
+
+    //受击打断动画
+    public void ResetAttack()
+    {
+        anim.ResetTrigger("Attack");//重置攻击的触发器
+    }
+
+    public void ResetHit()
+    {
+        anim.ResetTrigger("Hit");//重置僵直
+    }
+
+    public void ResetDizzy()
+    {
+        anim.ResetTrigger("Dizzy");//重置眩晕
+    }
+
 
     public void EndNotify()
     {
