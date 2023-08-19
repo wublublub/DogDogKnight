@@ -16,3 +16,9 @@ MonoBehaviour:
   currentHealth: 100
   baseDefence: 5
   currentDefence: 5
+  killPoint: 0
+  currentLevel: 1
+  maxLevel: 30
+  baseExp: 30
+  currentExp: 0
+  levelBuff: 0.1

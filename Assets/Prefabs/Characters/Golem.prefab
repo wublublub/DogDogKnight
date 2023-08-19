@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 6000180298098669789}
   - component: {fileID: 672942289866849496}
   - component: {fileID: 4748577249908236594}
+  - component: {fileID: 6568280400706890358}
   m_Layer: 0
   m_Name: Golem
   m_TagString: Enemy
@@ -365,8 +366,9 @@ Transform:
   m_Children:
   - {fileID: 1895590574841733893}
   - {fileID: 8568357215966600780}
+  - {fileID: 1616439635806730870}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -101.805, z: 0}
 --- !u!95 &3922038073429314667
 Animator:
@@ -448,6 +450,7 @@ MonoBehaviour:
   characterData: {fileID: 0}
   attackData: {fileID: 11400000, guid: 469af8b33c81b5c4f844ed3de44b187b, type: 2}
   isCritical: 0
+  isBeenHit: 0
 --- !u!114 &4748577249908236594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +468,25 @@ MonoBehaviour:
   lookAtTime: 3.5
   patrolRange: 4.5
   kickForce: 30
+  rockPerfab: {fileID: 0}
+  handPos: {fileID: 0}
+--- !u!114 &6568280400706890358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3793725134223504252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a93a76cefbd0748bce1539586ff71b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 3988127855649967526, guid: 11f886e478cdf484799addfbe064c0e1, type: 3}
+  barPoint: {fileID: 1616439635806730870}
+  alwaysVisible: 0
+  visibleTime: 3
+  timeLeft: 0
 --- !u!1 &3955027195477998882
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,6 +708,37 @@ Transform:
   - {fileID: 2009881818590059699}
   m_Father: {fileID: 5911187732803718623}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5237599702804006990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1616439635806730870}
+  m_Layer: 0
+  m_Name: HealthBar Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1616439635806730870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5237599702804006990}
+  m_LocalRotation: {x: -0, y: 0.77607256, z: -0, w: 0.63064367}
+  m_LocalPosition: {x: 0, y: 4.8, z: 0}
+  m_LocalScale: {x: 0.9999999, y: 1, z: 0.9999999}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1534326073176491192}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5736484737008963801
 GameObject:

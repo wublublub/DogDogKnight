@@ -248,6 +248,7 @@ GameObject:
   - component: {fileID: 7862124254277265888}
   - component: {fileID: 8230870635852021543}
   - component: {fileID: 7872974480742869486}
+  - component: {fileID: 2209176103420489813}
   m_Layer: 0
   m_Name: Grunt
   m_TagString: Enemy
@@ -269,8 +270,9 @@ Transform:
   m_Children:
   - {fileID: 4736037668879627076}
   - {fileID: 1468528519095238395}
+  - {fileID: 6474183549852239732}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 102.201, z: 0}
 --- !u!95 &3109195592679992029
 Animator:
@@ -352,6 +354,7 @@ MonoBehaviour:
   characterData: {fileID: 0}
   attackData: {fileID: 11400000, guid: 33fd90a0b0bd37e47a413f681e9596aa, type: 2}
   isCritical: 0
+  isBeenHit: 0
 --- !u!114 &7872974480742869486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,6 +372,23 @@ MonoBehaviour:
   lookAtTime: 2.5
   patrolRange: 3
   kickForce: 20
+--- !u!114 &2209176103420489813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3672707447092583635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a93a76cefbd0748bce1539586ff71b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 3988127855649967526, guid: 11f886e478cdf484799addfbe064c0e1, type: 3}
+  barPoint: {fileID: 6474183549852239732}
+  alwaysVisible: 0
+  visibleTime: 3
+  timeLeft: 0
 --- !u!1 &3752440534940032018
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +582,37 @@ Transform:
   - {fileID: 2151673566088362922}
   m_Father: {fileID: 1468528519095238395}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5254431299960070943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6474183549852239732}
+  m_Layer: 0
+  m_Name: HealthBar Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6474183549852239732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254431299960070943}
+  m_LocalRotation: {x: -0, y: -0.778249, z: 0, w: 0.62795585}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5569150671417733340}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5725369530254476188
 GameObject:

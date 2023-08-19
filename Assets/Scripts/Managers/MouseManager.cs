@@ -32,7 +32,7 @@ public class MouseManager : Singleton<MouseManager>
     protected override void Awake()
     {
         base.Awake();
-        //DontDestroyOnLoad(this);
+        DontDestroyOnLoad(this);
     }
 
 
@@ -60,6 +60,9 @@ public class MouseManager : Singleton<MouseManager>
                 case "Enemy":
                     Cursor.SetCursor(attack, new Vector2(16, 16), CursorMode.Auto);//此处对应当鼠标放在敌人身上时更改鼠标贴图
                     break;
+                case "Portal":
+                    Cursor.SetCursor(doorway, new Vector2(16, 16), CursorMode.Auto);
+                    break;
 
             }
 
@@ -83,6 +86,10 @@ public class MouseManager : Singleton<MouseManager>
             if (hitInfo.collider.gameObject.CompareTag("Attackable"))
             {
                 OnEnemyClick?.Invoke(hitInfo.collider.gameObject);//此处是将碰撞的碰撞体的游戏对象传入事件
+            }
+            if (hitInfo.collider.gameObject.CompareTag("Portal"))
+            {
+
             }
         }
     }

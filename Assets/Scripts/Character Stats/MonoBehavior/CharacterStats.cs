@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -5,6 +6,8 @@ using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
 {
+    public event Action<int, int> UpdateHealthBarOnAttack;
+
     public CharacterData_SO templateData;//作为模板数据用于解决多个敌人共用同一模板导致状态同步（同生共死）的问题
 
     public CharacterData_SO characterData;
@@ -105,13 +108,24 @@ public class CharacterStats : MonoBehaviour
         }
 
         //TODO:更新UI显示新的血量
+        UpdateHealthBarOnAttack?.Invoke(CurrentHealth, MaxHealth);
+
+
         //TODO:玩家获取经验值
+        if(CurrentHealth <= 0)
+        {
+            attacker.characterData.UpdateExp(characterData.killPoint);
+        }
+
+
+
     }
 
     public void TakeDamage(int damage, CharacterStats defener)//函数的重载，专门写一个投掷的石头的伤害的函数
     {
         int currentDamage = Mathf.Max(damage - defener.CurrentDefence, 0);
         CurrentHealth = Mathf.Max(CurrentHealth - currentDamage, 0);
+        UpdateHealthBarOnAttack?.Invoke(CurrentHealth, MaxHealth);
     }
 
     private int CurrentDamage()

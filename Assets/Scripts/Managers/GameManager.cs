@@ -11,6 +11,11 @@ public class GameManager : Singleton<GameManager>
     //创造列表收集所有在GameManager中加载了IEndGameObserver接口的函数
     List<IEndGameObserver>endGameObservers = new List<IEndGameObserver>();
 
+    protected override void Awake()
+    {
+        base.Awake();
+        DontDestroyOnLoad(this);
+    }
 
     public void RegisterPlayer(CharacterStats player)
     {
