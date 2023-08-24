@@ -36,11 +36,13 @@ public class SceneController : Singleton<SceneController>
     IEnumerator Transition(string sceneName, TransitionDestination.DestinationTag destinationTag)
     {
         //保存数据
+        SaveManager.Instance.SavePlayerData();
 
         if (SceneManager.GetActiveScene().name != sceneName)//如果场景名不同则为异常景传送
         {
             yield return SceneManager.LoadSceneAsync(sceneName);//在等待异步场景加载完全后再执行下面的代码
             yield return Instantiate(playerPrefab,GetDestination(destinationTag).transform.position,GetDestination(destinationTag).transform.rotation);
+            SaveManager.Instance.LoadPlayerData();//切换场景后会重新读取数据
             yield break;//都加载完成后执行该代码从协程中跳出去
         }
         else
